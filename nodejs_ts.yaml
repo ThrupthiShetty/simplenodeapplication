@@ -1,0 +1,33 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: newokedemotsdeployment
+spec:
+  selector:
+    matchLabels:
+      app: newokedemots
+  replicas: 1 # deployment runs 1 pods matching the template
+  template: # create pods using pod definition in this template
+    metadata:
+      labels:
+        app: newokedemots
+    spec:
+      containers:
+      - name: newokedemots
+        image: iad.ocir.io/orasenatdhubsblue02/okeasset/appdemobuild:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8084 #Endpoint is at port 80 in the container
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: newokedemotsservive
+spec:
+  ports:
+  - port: 8084
+    protocol: TCP
+  selector:
+    app: newokedemots
+  type: LoadBalancer
+    
